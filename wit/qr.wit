@@ -1,0 +1,5 @@
+package example:qr@1.0.0;
+
+interface qr {
+    get-qr-code: func(url: string, size: u32) -> string;
+}

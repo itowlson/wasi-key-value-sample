@@ -1,0 +1,26 @@
+[package]
+name = "qr-generator-cached"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+wit-bindgen-rt = { version = "0.34.0", features = ["bitflags"] }
+
+[lib]
+crate-type = ["cdylib"]
+
+[profile.release]
+codegen-units = 1
+opt-level = "s"
+debug = false
+strip = true
+lto = true
+
+[package.metadata.component]
+package = "component:qr-generator-cached"
+
+[package.metadata.component.dependencies]
+
+[package.metadata.component.target.dependencies]
+"example:qr" = { path = "../wit" }
+"wasi:keyvalue" = { path = "./wit/deps/keyvalue-2024-10-17" }

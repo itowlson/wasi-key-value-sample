@@ -1,0 +1,18 @@
+[package]
+name = "website"
+authors = ["itowlson <ivan.towlson@fermyon.com>"]
+description = ""
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+anyhow = "1"
+serde = { version = "1.0.214", features = ["derive"] }
+serde-querystring = "0.2.1"
+spin-sdk = "3.0.1"
+wit-bindgen = "0.16.0"
+
+[workspace]
