@@ -2,31 +2,25 @@
 mod bindings;
 
 use bindings::exports::example::qr::qr::Guest;
-use bindings::wasi::keyvalue::store;
+use bindings::wasi::keyvalue::store::Bucket;
 
 struct Component;
 
 impl Guest for Component {
-    fn get_qr_code(url: String, size: u32) -> String {
-        let store_name = "default";
-
+    fn get_qr_code(bucket: Bucket, url: String, size: u32) -> String {
         // Delimit the size using characters that can't be part of a URL
         let cache_key = format!("{url}<{size}>");
 
-        if let Ok(store) = store::open(&store_name) {
-            if let Ok(Some(cached)) = store.get(&cache_key) {
-                return String::from_utf8_lossy(&cached).to_string();
-            }
-
-            // It's not in the cache. Generate it and cache it.
-            let svg = qr::generate_qr_code(&url, size);
-        
-            let _ = store.set(&cache_key, svg.as_bytes()); // Failure to cache is not an error
-
-            return svg;
+        if let Ok(Some(cached)) = bucket.get(&cache_key) {
+            return String::from_utf8_lossy(&cached).to_string();
         }
 
-        qr::generate_qr_code(&url, size)
+        // It's not in the cache. Generate it and cache it.
+        let svg = qr::generate_qr_code(&url, size);
+    
+        let _ = bucket.set(&cache_key, svg.as_bytes()); // Failure to cache is not an error
+
+        return svg;
     }
 }
 

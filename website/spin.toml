@@ -14,7 +14,7 @@ component = "website"
 source = "target/wasm32-wasi/release/website.wasm"
 allowed_outbound_hosts = []
 key_value_stores = ["default"]
-dependencies_inherit_configuration = true
+dependencies_inherit_configuration = false
 [component.website.dependencies]
 "example:qr/qr" = { path = "../qr-generator-cached/target/wasm32-unknown-unknown/release/qr_generator_cached.wasm" }
 [component.website.build]

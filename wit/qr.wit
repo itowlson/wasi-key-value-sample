@@ -1,5 +1,6 @@
 package example:qr@1.0.0;
 
 interface qr {
-    get-qr-code: func(url: string, size: u32) -> string;
+    use wasi:keyvalue/store@0.2.0-draft2.{bucket};
+    get-qr-code: func(bucket: bucket, url: string, size: u32) -> string;
 }

@@ -650,17 +650,25 @@ pub mod exports {
                 #[doc(hidden)]
                 static __FORCE_SECTION_REF: fn() = super::super::super::super::__link_custom_section_describing_imports;
                 use super::super::super::super::_rt;
+                pub type Bucket = super::super::super::super::wasi::keyvalue::store::Bucket;
                 #[doc(hidden)]
                 #[allow(non_snake_case)]
                 pub unsafe fn _export_get_qr_code_cabi<T: Guest>(
-                    arg0: *mut u8,
-                    arg1: usize,
-                    arg2: i32,
+                    arg0: i32,
+                    arg1: *mut u8,
+                    arg2: usize,
+                    arg3: i32,
                 ) -> *mut u8 {
                     #[cfg(target_arch = "wasm32")] _rt::run_ctors_once();
-                    let len0 = arg1;
-                    let bytes0 = _rt::Vec::from_raw_parts(arg0.cast(), len0, len0);
-                    let result1 = T::get_qr_code(_rt::string_lift(bytes0), arg2 as u32);
+                    let len0 = arg2;
+                    let bytes0 = _rt::Vec::from_raw_parts(arg1.cast(), len0, len0);
+                    let result1 = T::get_qr_code(
+                        super::super::super::super::wasi::keyvalue::store::Bucket::from_handle(
+                            arg0 as u32,
+                        ),
+                        _rt::string_lift(bytes0),
+                        arg3 as u32,
+                    );
                     let ptr2 = _RET_AREA.0.as_mut_ptr().cast::<u8>();
                     let vec3 = (result1.into_bytes()).into_boxed_slice();
                     let ptr3 = vec3.as_ptr().cast::<u8>();
@@ -678,19 +686,24 @@ pub mod exports {
                     _rt::cabi_dealloc(l0, l1, 1);
                 }
                 pub trait Guest {
-                    fn get_qr_code(url: _rt::String, size: u32) -> _rt::String;
+                    fn get_qr_code(
+                        bucket: Bucket,
+                        url: _rt::String,
+                        size: u32,
+                    ) -> _rt::String;
                 }
                 #[doc(hidden)]
                 macro_rules! __export_example_qr_qr_1_0_0_cabi {
                     ($ty:ident with_types_in $($path_to_types:tt)*) => {
                         const _ : () = { #[export_name =
                         "example:qr/qr@1.0.0#get-qr-code"] unsafe extern "C" fn
-                        export_get_qr_code(arg0 : * mut u8, arg1 : usize, arg2 : i32,) ->
-                        * mut u8 { $($path_to_types)*:: _export_get_qr_code_cabi::<$ty >
-                        (arg0, arg1, arg2) } #[export_name =
-                        "cabi_post_example:qr/qr@1.0.0#get-qr-code"] unsafe extern "C" fn
-                        _post_return_get_qr_code(arg0 : * mut u8,) { $($path_to_types)*::
-                        __post_return_get_qr_code::<$ty > (arg0) } };
+                        export_get_qr_code(arg0 : i32, arg1 : * mut u8, arg2 : usize,
+                        arg3 : i32,) -> * mut u8 { $($path_to_types)*::
+                        _export_get_qr_code_cabi::<$ty > (arg0, arg1, arg2, arg3) }
+                        #[export_name = "cabi_post_example:qr/qr@1.0.0#get-qr-code"]
+                        unsafe extern "C" fn _post_return_get_qr_code(arg0 : * mut u8,) {
+                        $($path_to_types)*:: __post_return_get_qr_code::<$ty > (arg0) }
+                        };
                     };
                 }
                 #[doc(hidden)]
@@ -853,9 +866,9 @@ pub(crate) use __export_example_impl as export;
 #[cfg(target_arch = "wasm32")]
 #[link_section = "component-type:wit-bindgen:0.31.0:component:qr-generator-cached:example:encoded world"]
 #[doc(hidden)]
-pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 664] = *b"\
-\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\x9a\x04\x01A\x02\x01\
-A\x04\x01B\x1c\x01q\x03\x0dno-such-store\0\0\x0daccess-denied\0\0\x05other\x01s\0\
+pub static __WIT_BINDGEN_COMPONENT_TYPE: [u8; 703] = *b"\
+\0asm\x0d\0\x01\0\0\x19\x16wit-component-encoding\x04\0\x07\xc1\x04\x01A\x02\x01\
+A\x05\x01B\x1c\x01q\x03\x0dno-such-store\0\0\x0daccess-denied\0\0\x05other\x01s\0\
 \x04\0\x05error\x03\0\0\x01ps\x01ks\x01r\x02\x04keys\x02\x06cursor\x03\x04\0\x0c\
 key-response\x03\0\x04\x04\0\x06bucket\x03\x01\x01h\x06\x01p}\x01k\x08\x01j\x01\x09\
 \x01\x01\x01@\x02\x04self\x07\x03keys\0\x0a\x04\0\x12[method]bucket.get\x01\x0b\x01\
@@ -865,10 +878,11 @@ e\x01\x0e\x01j\x01\x7f\x01\x01\x01@\x02\x04self\x07\x03keys\0\x0f\x04\0\x15[meth
 od]bucket.exists\x01\x10\x01j\x01\x05\x01\x01\x01@\x02\x04self\x07\x06cursor\x03\
 \0\x11\x04\0\x18[method]bucket.list-keys\x01\x12\x01i\x06\x01j\x01\x13\x01\x01\x01\
 @\x01\x0aidentifiers\0\x14\x04\0\x04open\x01\x15\x03\x01\x20wasi:keyvalue/store@\
-0.2.0-draft2\x05\0\x01B\x02\x01@\x02\x03urls\x04sizey\0s\x04\0\x0bget-qr-code\x01\
-\0\x04\x01\x13example:qr/qr@1.0.0\x05\x01\x04\x01%component:qr-generator-cached/\
-example\x04\0\x0b\x0d\x01\0\x07example\x03\0\0\0G\x09producers\x01\x0cprocessed-\
-by\x02\x0dwit-component\x070.216.0\x10wit-bindgen-rust\x060.31.0";
+0.2.0-draft2\x05\0\x02\x03\0\0\x06bucket\x01B\x05\x02\x03\x02\x01\x01\x04\0\x06b\
+ucket\x03\0\0\x01i\x01\x01@\x03\x06bucket\x02\x03urls\x04sizey\0s\x04\0\x0bget-q\
+r-code\x01\x03\x04\x01\x13example:qr/qr@1.0.0\x05\x02\x04\x01%component:qr-gener\
+ator-cached/example\x04\0\x0b\x0d\x01\0\x07example\x03\0\0\0G\x09producers\x01\x0c\
+processed-by\x02\x0dwit-component\x070.216.0\x10wit-bindgen-rust\x060.31.0";
 #[inline(never)]
 #[doc(hidden)]
 pub fn __link_custom_section_describing_imports() {

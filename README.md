@@ -53,3 +53,9 @@ curl "localhost:3000/?url=mysite&size=100"
 ```
 
 You can look at the KV store in `.spin` with a SQLite viewer to confirm that items have been cached.
+
+## And another way
+
+See the `another-way` branch for another way of doing this.  In this branch, the QR component expects
+to be _given_ a WASI `bucket` rather than opening one itself.  This puts the Spin app in control
+of choosing which bucket to use.
